@@ -676,6 +676,10 @@
       <div class="panel">
         <div class="form-grid" style="margin-bottom:12px;">
           <div class="field">
+            <label>Your Name (Sender)</label>
+            <input type="text" id="senderName" placeholder="e.g. Amit Sharma" value="Arjun Mehta" />
+          </div>
+          <div class="field">
             <label>First name</label>
             <input type="text" id="fname" placeholder="e.g. Rahul" />
           </div>
@@ -800,6 +804,7 @@
     }
 
     async function generate() {
+      const senderName = document.getElementById('senderName').value.trim() || 'Arjun Mehta';
       const fname = document.getElementById('fname').value.trim();
       const desig = document.getElementById('desigInput').value.trim();
       const company = document.getElementById('company').value.trim();
@@ -841,7 +846,7 @@ Rules:
 - One crisp value proposition for ${svc.name}.
 - Brief social proof hint (e.g., "helping 50+ IT teams across India") — no fabricated names.
 - CTA: low-friction — suggest a 15-min discovery call or a short demo.
-- Sign off as: Arjun Mehta | IT Sales Lead
+- Sign off as: ${senderName} | IT Sales Lead
 - Format strictly as:
 Subject: [subject line]
 
