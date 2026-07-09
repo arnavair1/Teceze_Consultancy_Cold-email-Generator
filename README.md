@@ -38,7 +38,7 @@ Users simply select the service they want to pitch, choose the target designatio
 
 ```
 .
-├── index.html
+├── cold-email-generator_1.html
 └── netlify
     └── functions
         └── generate.js
