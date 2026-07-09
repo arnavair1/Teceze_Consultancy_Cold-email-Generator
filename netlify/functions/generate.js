@@ -24,10 +24,12 @@ exports.handler = async (event) => {
         );
 
         const data = await response.json();
+        
+        const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No text generated.";
 
         return {
             statusCode: 200,
-            body: JSON.stringify(data),
+            body: JSON.stringify({ text: generatedText }),
         };
     } catch (err) {
         return {
