@@ -847,24 +847,28 @@ Subject: [subject line]
 
 [email body]`;
 
-      try {
-              const res = await fetch("/.netlify/functions/generate", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ prompt })
-        });
-        const data = await res.json();
-        const text = (data.content || []).map(b => b.text || '').join('');
-        document.getElementById('outputBody').textContent = text || 'No output received. Please try again.';
-        const panel = document.getElementById('outputPanel');
-        panel.classList.add('visible');
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (e) {
-        document.getElementById('outputBody').textContent = 'Something went wrong. Please try again.';
-        document.getElementById('outputPanel').classList.add('visible');
-      }
+try {
+    const res = await fetch("/.netlify/functions/generate", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt })
+    });
+    
+    const data = await res.json();
+    
+    // Read the clean text object we created in the Netlify function
+    const text = data.text || 'No output received. Please try again.';
+    
+    document.getElementById('outputBody').textContent = text;
+    const panel = document.getElementById('outputPanel');
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+} catch (e) {
+    document.getElementById('outputBody').textContent = 'Something went wrong. Please try again.';
+    document.getElementById('outputPanel').classList.add('visible');
+}
 
       btn.disabled = false;
       btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Generate cold email';
