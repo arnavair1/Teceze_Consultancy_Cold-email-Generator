@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cold Email Generator — IT Sales Suite</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #f4f6fa;
+      --surface: #ffffff;
+      --surface2: #f0f2f7;
+      --border: rgba(0, 0, 0, 0.09);
+      --border-active: rgba(37, 99, 235, 0.4);
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent-glow: rgba(37, 99, 235, 0.08);
+      --accent-dark: #1d4ed8;
+      --selected-bg: #0f172a;
+      --selected-border: #0f172a;
+      --selected-text: #e2e8f0;
+      --selected-sub: #94a3b8;
+      --pill-bg: #e8edf5;
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 60px;
+      background: rgba(244, 246, 250, 0.95);
+      border-bottom: 0.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span {
+      color: var(--accent);
+    }
+
+    .nav-badge {
+      font-size: 11px;
+      font-weight: 500;
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 0.5px solid var(--accent);
+      border-radius: 20px;
+      padding: 3px 10px;
+      letter-spacing: 0.04em;
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 3.5rem;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      color: var(--accent);
+      font-style: normal;
+    }
+
+    .hero p {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* MAIN LAYOUT */
+    .main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem 5rem;
+    }
+
+    /* STEP */
+    .step {
+      margin-bottom: 2.5rem;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+
+    .step-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    /* SECTION LABEL inside step */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+      padding-left: 2px;
+    }
+
+    /* SERVICE CATEGORIES */
+    .cat-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .cat-tab {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 14px;
+      border-radius: 20px;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.18s;
+      letter-spacing: 0.02em;
+    }
+
+    .cat-tab:hover {
+      border-color: rgba(0, 0, 0, 0.2);
+      color: var(--text);
+    }
+
+    .cat-tab.active {
+      background: #0f172a;
+      border-color: #0f172a;
+      color: #e2e8f0;
+      font-weight: 600;
+    }
+
+    /* SERVICE GRID */
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+    }
+
+    .svc-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px 14px;
+      cursor: pointer;
+      transition: all 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .svc-card:hover {
+      border-color: rgba(0, 0, 0, 0.18);
+      background: var(--surface2);
+    }
+
+    .svc-card.selected {
+      background: var(--selected-bg);
+      border: 1.5px solid var(--selected-border);
+    }
+
+    .svc-card.selected::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+    }
+
+    .svc-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .svc-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .svc-card.selected .svc-name {
+      color: var(--selected-text);
+    }
+
+    .svc-card.selected .svc-cat-tag {
+      color: var(--selected-sub);
+    }
+
+    .svc-cat-tag {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+
+    .svc-check {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .svc-card.selected .svc-check {
+      display: flex;
+    }
+
+    .svc-check svg {
+      width: 10px;
+      height: 10px;
+      stroke: #0f172a;
+      fill: none;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* DESIGNATION CHIPS */
+    .desig-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .desig-chip {
+      font-size: 13px;
+      font-weight: 400;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 0.5px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.16s;
+    }
+
+    .desig-chip:hover {
+      border-color: rgba(0, 0, 0, 0.2);
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .desig-chip.selected {
+      background: #0f172a;
+      border: 1.5px solid #0f172a;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    /* FORM */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-grid.full {
+      grid-template-columns: 1fr;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.16s;
+      width: 100%;
+    }
+
+    .field input::placeholder,
+    .field textarea::placeholder {
+      color: #b0b7c3;
+    }
+
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus {
+      border-color: var(--accent);
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 80px;
+      line-height: 1.6;
+    }
+
+    .field select option {
+      background: #ffffff;
+      color: #111827;
+    }
+
+    /* TONE ROW */
+    .tone-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .tone-btn {
+      flex: 1;
+      padding: 9px 0;
+      border-radius: var(--radius);
+      border: 0.5px solid var(--border);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 0.16s;
+      text-align: center;
+    }
+
+    .tone-btn:hover {
+      color: var(--text);
+      border-color: rgba(0, 0, 0, 0.2);
+      background: var(--surface2);
+    }
+
+    .tone-btn.selected {
+      background: #0f172a;
+      border: 1.5px solid #0f172a;
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    /* CARD CONTAINER */
+    .panel {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* DIVIDER */
+    .divider {
+      border: none;
+      border-top: 0.5px solid var(--border);
+      margin: 1.25rem 0;
+    }
+
+    /* GENERATE BUTTON */
+    .gen-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius);
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: background 0.16s, opacity 0.16s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 1.5rem;
+    }
+
+    .gen-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .gen-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .gen-btn:active {
+      transform: scale(0.99);
+    }
+
+    /* SPINNER */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.65s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* OUTPUT */
+    .output-panel {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-top: 2rem;
+      display: none;
+    }
+
+    .output-panel.visible {
+      display: block;
+    }
+
+    .output-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 1.5rem;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--surface2);
+    }
+
+    .output-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .copy-btn {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 0.5px solid var(--accent);
+      border-radius: 6px;
+      padding: 5px 12px;
+      cursor: pointer;
+      transition: all 0.16s;
+    }
+
+    .copy-btn:hover {
+      background: rgba(37, 99, 235, 0.12);
+    }
+
+    .output-body {
+      padding: 1.5rem;
+      font-size: 14px;
+      line-height: 1.8;
+      color: #1e293b;
+      white-space: pre-wrap;
+      min-height: 80px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 0.5px solid var(--border);
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div class="nav-logo">Mail<span>ForME</span></div>
+    <div class="nav-badge">IT Sales Suite</div>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-eyebrow">AI-powered outreach</div>
+    <h1>Cold emails that <em>actually</em> get replies</h1>
+    <p>Personalised, role-specific cold emails for IT services sales — built for Pune's fastest-growing tech sales
+      teams.</p>
+  </div>
+
+  <div class="main">
+
+    <!-- STEP 1: CHOOSE SERVICE -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Choose service</div>
+          <div class="step-sub">Select the solution you are pitching</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="section-label">Filter by category</div>
+        <div class="cat-row" id="catRow">
+          <button class="cat-tab active" onclick="filterCat(this,'all')">All services</button>
+          <button class="cat-tab" onclick="filterCat(this,'cloud')">Cloud</button>
+          <button class="cat-tab" onclick="filterCat(this,'network')">Network</button>
+          <button class="cat-tab" onclick="filterCat(this,'it')">IT Services</button>
+          <button class="cat-tab" onclick="filterCat(this,'security')">Security</button>
+          <button class="cat-tab" onclick="filterCat(this,'software')">Software</button>
+        </div>
+
+        <div class="service-grid" id="serviceGrid"></div>
+      </div>
+    </div>
+
+    <!-- STEP 2: DESIGNATION -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Target designation</div>
+          <div class="step-sub">Who are you writing to?</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="desig-wrap" id="desigWrap">
+          <button class="desig-chip" onclick="pickDesig(this)">IT Manager</button>
+          <button class="desig-chip" onclick="pickDesig(this)">IT Head</button>
+          <button class="desig-chip" onclick="pickDesig(this)">CIO</button>
+          <button class="desig-chip" onclick="pickDesig(this)">CTO</button>
+          <button class="desig-chip" onclick="pickDesig(this)">CISO</button>
+          <button class="desig-chip" onclick="pickDesig(this)">IT Director</button>
+          <button class="desig-chip" onclick="pickDesig(this)">IT Procurement Manager</button>
+          <button class="desig-chip" onclick="pickDesig(this)">VP IT</button>
+          <button class="desig-chip" onclick="pickDesig(this)">CEO</button>
+          <button class="desig-chip" onclick="pickDesig(this)">MD</button>
+          <button class="desig-chip" onclick="pickDesig(this)">Partnership Manager</button>
+          <button class="desig-chip" onclick="pickDesig(this)">Alliance Manager</button>
+          <button class="desig-chip" onclick="pickDesig(this)">Cybersecurity Manager</button>
+          <button class="desig-chip" onclick="pickDesig(this)">Network Operations Head</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: PROSPECT DETAILS -->
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Prospect details</div>
+          <div class="step-sub">More detail = more personalised email</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="form-grid" style="margin-bottom:12px;">
+          <div class="field">
+            <label>First name</label>
+            <input type="text" id="fname" placeholder="e.g. Rahul" />
+          </div>
+          <div class="field">
+            <label>Designation (override)</label>
+            <input type="text" id="desigInput" placeholder="Auto-filled from step 2" />
+          </div>
+        </div>
+        <div class="form-grid" style="margin-bottom:12px;">
+          <div class="field">
+            <label>Company</label>
+            <input type="text" id="company" placeholder="e.g. Infosys" />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="email" id="email" placeholder="e.g. rahul@infosys.com" />
+          </div>
+        </div>
+        <div class="field">
+          <label>LinkedIn profile URL (optional)</label>
+          <input type="text" id="linkedin" placeholder="https://linkedin.com/in/..." />
+        </div>
+
+        <hr class="divider" />
+
+        <div class="section-label" style="margin-bottom:10px;">Tone &amp; style</div>
+        <div class="tone-row" style="margin-bottom:16px;">
+          <button class="tone-btn selected" onclick="pickTone(this,'professional')">Professional</button>
+          <button class="tone-btn" onclick="pickTone(this,'conversational')">Conversational</button>
+          <button class="tone-btn" onclick="pickTone(this,'direct')">Direct / bold</button>
+          <button class="tone-btn" onclick="pickTone(this,'consultative')">Consultative</button>
+        </div>
+
+        <div class="field">
+          <label>Extra context (pain points, news, referral, etc.)</label>
+          <textarea id="extra"
+            placeholder="e.g. Their company recently expanded cloud infra. They had a security audit last quarter. Referred by a colleague."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <button class="gen-btn" id="genBtn" onclick="generate()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+        <path d="M2 17l10 5 10-5" />
+        <path d="M2 12l10 5 10-5" />
+      </svg>
+      Generate cold email
+    </button>
+
+    <!-- OUTPUT -->
+    <div class="output-panel" id="outputPanel">
+      <div class="output-topbar">
+        <div class="output-label">Generated email</div>
+        <button class="copy-btn" onclick="copyEmail()">Copy</button>
+      </div>
+      <div class="output-body" id="outputBody"></div>
+    </div>
+
+  </div>
+
+  <footer>MailForME — IT Sales Suite &nbsp;·&nbsp; Built for sales &amp; marketing teams</footer>
+
+  <script>
+    const services = [
+      { id: 'wasabi', name: 'Wasabi Technologies', cat: 'cloud', icon: '☁️', tag: 'Hot cloud storage', value: 'hot cloud storage — 80% cheaper than AWS S3, zero egress or API fees, S3-compatible, 11 nines durability', pain: 'high cloud storage costs, AWS/Azure bills, data governance, backup scalability' },
+      { id: 'netbrain', name: 'NetBrain', cat: 'network', icon: '🔗', tag: 'Network automation', value: 'network automation and intent-based network operations — eliminates manual CLI, single pane of glass for hybrid networks', pain: 'slow MTTR, manual troubleshooting, network outages, complex hybrid environments' },
+      { id: 'compliance', name: 'Compliance', cat: 'it', icon: '📋', tag: 'IT compliance services', value: 'end-to-end IT compliance management — ISO 27001, SOC 2, GDPR, PCI-DSS audit readiness and advisory', pain: 'audit failures, compliance gaps, regulatory risk, manual compliance tracking' },
+      { id: 'cybersec', name: 'Cyber Security', cat: 'security', icon: '🔒', tag: 'Cybersecurity services', value: 'comprehensive cybersecurity services — threat detection, incident response, vulnerability management, and security posture improvement', pain: 'ransomware, data breaches, insider threats, lack of security visibility' },
+      { id: 'firewall', name: 'Firewall Security', cat: 'security', icon: '🛡️', tag: 'Firewall management', value: 'managed firewall security services — next-gen firewall deployment, policy management, and 24/7 monitoring', pain: 'firewall misconfigurations, unauthorised access, flat networks, legacy firewall policies' },
+      { id: 'managed', name: 'Managed IT Services', cat: 'it', icon: '⚙️', tag: 'Fully managed IT', value: 'fully managed IT services — 24/7 helpdesk, infrastructure management, end-user computing, and digital transformation', pain: 'IT resource constraints, rising OpEx, ticket backlog, legacy infrastructure' },
+      { id: 'pentest', name: 'Penetration Testing', cat: 'security', icon: '🎯', tag: 'Ethical hacking & pentest', value: 'professional penetration testing — web app, network, mobile, and social engineering assessments with detailed remediation reports', pain: 'unknown vulnerabilities, compliance requirements, recent breach concerns, third-party risk' },
+      { id: 'secmon', name: 'Security Monitoring', cat: 'security', icon: '📡', tag: 'SOC & SIEM monitoring', value: '24/7 security monitoring — SOC-as-a-service, SIEM management, threat hunting, and real-time incident alerting', pain: 'lack of visibility, security alert fatigue, no in-house SOC, extended threat dwell time' },
+      { id: 'software', name: 'Software', cat: 'software', icon: '💻', tag: 'Enterprise software', value: 'enterprise software solutions — ERP, HRMS, CRM, and custom application development tailored to business workflows', pain: 'legacy software, manual processes, disconnected systems, digital transformation gaps' },
+      { id: 'sectona', name: 'Sectona (PAM)', cat: 'security', icon: '🔑', tag: 'Privileged access mgmt', value: 'privileged access management — secures privileged accounts, sessions, and credentials across on-prem, cloud, and hybrid with zero-trust', pain: 'insider threats, credential theft, audit compliance, zero-trust roadmap' },
+      { id: 'lucy', name: 'Lucy Security', cat: 'security', icon: '🎓', tag: 'Security awareness', value: 'security awareness training — phishing simulations, e-learning campaigns, behavioural risk scoring, compliance reporting', pain: 'phishing attacks, human error, GDPR/ISO compliance, low security culture' },
+      { id: 'bluecat', name: 'BlueCat', cat: 'network', icon: '🌐', tag: 'DNS & network intelligence', value: 'adaptive DNS and network intelligence — centralised DDI (DNS/DHCP/IPAM), network edge security, multi-cloud visibility', pain: 'DNS sprawl, network complexity, shadow IT, multi-cloud visibility gaps' },
+    ];
+
+    let selectedSvc = null;
+    let selectedDesig = null;
+    let selectedTone = 'professional';
+    let activeCat = 'all';
+
+    function renderServices() {
+      const grid = document.getElementById('serviceGrid');
+      const filtered = activeCat === 'all' ? services : services.filter(s => s.cat === activeCat);
+      grid.innerHTML = filtered.map(s => `
+    <div class="svc-card ${selectedSvc === s.id ? 'selected' : ''}" onclick="pickSvc('${s.id}')">
+      <div class="svc-check"><svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>
+      <div class="svc-icon">${s.icon}</div>
+      <div class="svc-name">${s.name}</div>
+      <div class="svc-cat-tag">${s.tag}</div>
+    </div>
+  `).join('');
+    }
+
+    function pickSvc(id) {
+      selectedSvc = id;
+      renderServices();
+    }
+
+    function filterCat(el, cat) {
+      activeCat = cat;
+      document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      renderServices();
+    }
+
+    function pickDesig(el) {
+      document.querySelectorAll('.desig-chip').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedDesig = el.textContent;
+      document.getElementById('desigInput').value = selectedDesig;
+    }
+
+    function pickTone(el, tone) {
+      document.querySelectorAll('.tone-btn').forEach(t => t.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedTone = tone;
+    }
+
+    async function generate() {
+      const fname = document.getElementById('fname').value.trim();
+      const desig = document.getElementById('desigInput').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const linkedin = document.getElementById('linkedin').value.trim();
+      const extra = document.getElementById('extra').value.trim();
+
+      if (!selectedSvc) { alert('Please select a service to pitch.'); return; }
+      if (!desig) { alert('Please select or enter a target designation.'); return; }
+
+      const svc = services.find(s => s.id === selectedSvc);
+      const btn = document.getElementById('genBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<div class="spinner"></div> Crafting your email…';
+
+      const prospect = [
+        fname ? `Name: ${fname}` : '',
+        `Designation: ${desig}`,
+        company ? `Company: ${company}` : '',
+        email ? `Email: ${email}` : '',
+        linkedin ? `LinkedIn: ${linkedin}` : '',
+      ].filter(Boolean).join('\n');
+
+      const prompt = `You are an expert B2B cold email writer specialising in IT services sales in India and globally.
+
+Write a high-converting cold outreach email to sell "${svc.name}" — ${svc.value} — to the following prospect:
+
+${prospect}
+
+Tone: ${selectedTone}
+${extra ? `Additional context: ${extra}` : ''}
+
+Rules:
+- Subject line: punchy, specific, under 9 words. Reference company/designation if known.
+- Do NOT open with "I hope this email finds you well" or any cliché opener.
+- Open with a relevant pain point, provocative question, or sharp observation relevant to the "${desig}" persona.
+- Body: under 180 words.
+- Clearly state one key pain point the prospect faces: ${svc.pain}
+- One crisp value proposition for ${svc.name}.
+- Brief social proof hint (e.g., "helping 50+ IT teams across India") — no fabricated names.
+- CTA: low-friction — suggest a 15-min discovery call or a short demo.
+- Sign off as: Arjun Mehta | IT Sales Lead
+- Format strictly as:
+Subject: [subject line]
+
+[email body]`;
+
+      try {
+        const res = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1000,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+        const data = await res.json();
+        const text = (data.content || []).map(b => b.text || '').join('');
+        document.getElementById('outputBody').textContent = text || 'No output received. Please try again.';
+        const panel = document.getElementById('outputPanel');
+        panel.classList.add('visible');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (e) {
+        document.getElementById('outputBody').textContent = 'Something went wrong. Please try again.';
+        document.getElementById('outputPanel').classList.add('visible');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg> Generate cold email';
+    }
+
+    function copyEmail() {
+      const text = document.getElementById('outputBody').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    }
+
+    renderServices();
+  </script>
+</body>
+
+</html>
